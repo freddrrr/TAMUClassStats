@@ -26,7 +26,7 @@ app.get('/review', (request, response) => {
 
 /*Database Queries*/
 //Pull list of course numbers
-app.get('/query/course-numbers', db.getCourseNumbers)
+app.get('/query/course-numbers/:department', db.getCourseNumbers)
 //Pull list of departments
 app.get('/query/departments', db.getDepartments)
 //Pull list of professors
@@ -42,5 +42,5 @@ app.put('/users/:id', db.updateUser)
 */
 
 app.listen(port, () => {
-  console.log('App running on port ${port}.')
+  console.log('App running on port %s.', port)
 })

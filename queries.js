@@ -1,8 +1,10 @@
+const queryString = require('querystring');
+
 const Pool = require('pg').Pool
 const pool = new Pool({
     user: 'guru',
     host:  'tamucoursestats.cv3iclekihw6.us-east-2.rds.amazonaws.com',
-    database: 'ClassStats',
+    database: 'postgres_test', //'ClassStats',
     password: 'gurupassword0',
     port: 5432,
 })
@@ -47,29 +49,93 @@ const updateUser = (request, response) => {
 
 const getSemesters = (request, response) => {
     console.log("Called getSemesters");
-    response.status(200).json("Success!");
+
+    pool.query("SELECT * FROM public.\"Semesters\"",
+        (err, res) => {
+            if (err) {
+                throw err
+            }
+
+            //Populate result array with semesters
+            let semesters = [];
+            res.rows.forEach((elem) => {
+                let semester = elem.Term + " " + elem.Year;
+                console.log(semester); //For debugging
+                semesters.push(semester);
+            });
+            response.status(200).json(semesters);
+        }
+    );
 }
 
 const getDepartments = (request, response) => {
     console.log("Called getDepartments");
-    response.status(200).json("Success!");
+
+    pool.query("SELECT * FROM public.\"Departments\"",
+        (err, res) => {
+            if (err) {
+                throw err
+            }
+
+            //Populate result array with departments
+            let departments = [];
+            res.rows.forEach((elem) => {
+                let department = elem.Abbreviation + " - " + elem.FullName;
+                console.log(department); //For debugging
+                departments.push(department);
+            });
+            response.status(200).json(departments);
+        }
+    );
 }
 
 const getCourseNumbers = (request, response) => {
     console.log("Called getCourseNumbers");
-    response.status(200).json("Success!");
+
+    const qStringParams = queryString.parse(request.params.department);
+    pool.query("SELECT * FROM public.\"Courses\" WHERE \"Courses\".\"Department\" = $1",
+        [qStringParams.department],
+        (err, res) => {
+            if (err) {
+                throw err
+            }
+
+            //Populate result array with courses
+            let courses = [];
+            res.rows.forEach((elem) => {
+                let course = elem.CourseNum + " - " + elem.CourseTitle;
+                console.log(course); //For debugging
+                courses.push(course);
+            });
+            response.status(200).json(courses);
+        }
+    );
 }
 
 const getProfessors = (request, response) => {
     console.log("Called getProfessors");
+    pool.query("SELECT * FROM public.\"Professors\"",
+        (err, res) => {
+            if (err) {
+                throw err
+            }
 
-    response.status(200).json("Success!");
+            //Populate result array with professors
+            let professors = [];
+            res.rows.forEach((elem) => {
+                let professor = elem.LastName + ", " + elem.FirstName;
+                console.log(professor); //For debugging
+                professors.push(professor);
+            });
+            response.status(200).json(professors);
+        }
+    );
 }
 
 module.exports = {
-    getUsers,
-    createUser,
-    updateUser,
+    //getUsers,
+    //createUser,
+    //updateUser,
     getSemesters,
     getDepartments,
     getCourseNumbers,
