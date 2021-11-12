@@ -1,9 +1,11 @@
 /*Constants and Imports*/
-const express = require('express')
-const bodyParser = require('body-parser')
-const app = express()
-const db = require('./queries')
-const port = 3000
+const express = require('express');
+const app = express();
+
+const bodyParser = require('body-parser');
+const db = require('./queries');
+const session = require('express-session');
+const port = 3001;
 
 app.use(bodyParser.json())
 app.use(
@@ -13,20 +15,46 @@ app.use(
 )
 //Add support for CSS stylesheets in /content folder
 app.use(express.static(__dirname + "/content"));
+app.use(session({
+    secret: '2]fL>9VD=[;u9FJ',
+    resave: true,
+    saveUninitialized: true
+}));
 
 /*HTML Pages*/
+//Render login.html
+app.get(['/', '/login'], (request, response) => {
+    if (request.session.loggedin) {
+        response.redirect("/search");
+    }
+    else {
+        response.sendFile(__dirname + "/content/login.html");
+    }
+})
 //Render search.html
-app.get(['/', '/search'], (request, response) => {
-    response.sendFile(__dirname + "/content/search.html");
+app.get('/search', (request, response) => {
+    if (!request.session.loggedin) {
+        response.redirect("/login");
+    }
+    else {
+        response.sendFile(__dirname + "/content/search.html");
+    }
 })
 //Render review.html
 app.get('/review', (request, response) => {
-    response.sendFile(__dirname + "/content/review.html");
+    if (!request.session.loggedin) {
+        response.redirect("/login");
+    }
+    else {
+        response.sendFile(__dirname + "/content/review.html");
+    }
 })
 
 /*Database Queries*/
+//Perform user authentication
+app.post('/auth', db.authenticateUser)
 //Pull list of course numbers
-app.get('/query/course-numbers/:department', db.getCourseNumbers)
+app.get('/query/course-numbers/:department', db.getCourseNumbersByDepartment)
 //Pull list of departments
 app.get('/query/departments', db.getDepartments)
 //Pull list of professors
@@ -34,12 +62,8 @@ app.get('/query/professors', db.getProfessors)
 //Pull list of semesters
 app.get('/query/semesters', db.getSemesters)
 
-/*
-//(http://localhost:3000/users)
-app.get('/users', db.getUsers)
-app.post('/users', db.createUser)
-app.put('/users/:id', db.updateUser)
-*/
+/*Development Endpoints (i.e. not active for release)*/
+//app.get("/dev/dept", db.populateDepartments)
 
 app.listen(port, () => {
   console.log('App running on port %s.', port)
