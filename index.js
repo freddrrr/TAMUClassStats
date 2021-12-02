@@ -53,6 +53,8 @@ app.get('/review', (request, response) => {
 /*Database Queries*/
 //Perform user authentication
 app.post('/auth', db.authenticateUser)
+//Post a new review to the database
+app.post('/post-review', db.postReview)
 //Pull list of course numbers
 app.get('/query/course-numbers/:department', db.getCourseNumbersByDepartment)
 //Pull list of departments
