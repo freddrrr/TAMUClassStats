@@ -9,7 +9,7 @@ window.onload = async function () {
             for (x = 0; x < data.length; x++) {
                 var dropdownItemText = data[x];
 
-                var dropdownItem = document.createElement("semesterDropdownItem_" + x);
+                var dropdownItem = document.createElement("semesterDropdownItem");
                 dropdownItem.classList = "dropdown-item";
                 dropdownItem.innerText = dropdownItemText;
 
@@ -37,7 +37,7 @@ window.onload = async function () {
             for (x = 0; x < data.length; x++) {
                 var dropdownItemText = data[x];
 
-                var dropdownItem = document.createElement("departmentDropdownItem_" + x);
+                var dropdownItem = document.createElement("departmentDropdownItem");
                 dropdownItem.classList = "dropdown-item";
                 dropdownItem.innerText = dropdownItemText;
 
@@ -45,6 +45,9 @@ window.onload = async function () {
                 var onClickFunc = function (dropdownText) {
                     dropdownItem.onclick = function () {
                         departmentText.value = dropdownText;
+
+                        //TODO: Get list of valid course numbers based on department and un-hide Course Number
+                        //input-group (need to make hidden by default)
                     }
                 }
                 onClickFunc(dropdownItemText);
@@ -53,4 +56,11 @@ window.onload = async function () {
             }
         }
     })
+}
+
+function filterOnClickFunc() {
+    var filterText = document.getElementById("FilterText");
+    var dropdownText = event.target.innerText;
+
+    filterText.value = dropdownText;
 }

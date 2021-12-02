@@ -33,78 +33,83 @@
                     <p style="height: 25px;margin-bottom: 0px;">0 - Strongly Disagree</p>
                     <p style="height: 25px;margin-bottom: 0px;">5 - Strongly Agree</p>
                 </div>
-                <div style="margin-top: 20px;padding: 20px;background: rgba(80,0,0,0.44);border-radius: 8px;border: 1px solid #500000;max-height: 70vh;overflow-y: auto;">
-                    <div class="input-group" style="width: 60%;margin: 0 auto;">
-                        <div class="input-group-prepend"><span class="input-group-text">Professor</span></div><input class="form-control" type="text">
-                        <div class="input-group-append"></div>
+                <form action="post-review" method="post">
+                    <input id="professorUINInput" type="hidden" name="professorUIN">
+                    <div style="margin-top: 20px;padding: 20px;background: rgba(80,0,0,0.44);border-radius: 8px;border: 1px solid #500000;max-height: 70vh;overflow-y: auto;">
+                        <div class="input-group" style="width: 60%;margin: 0 auto;">
+                            <div class="input-group-prepend"><span class="input-group-text">Professor</span></div><input class="form-control" type="text" name="professor" list="ProfessorsDataList" onfocusout="professorOnFocusOutFunc()">
+                            <!--<div class="input-group-append"></div>-->
+                        </div>
+                        <div class="table-responsive" style="width: 60%;margin: 20px auto 10px;">
+                            <table class="table">
+                                <thead>
+                                    <tr></tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1.)</td>
+                                        <td>
+                                            <p style="float: left;text-align: left;">Course material is communicated effectively</p>
+                                        </td>
+                                        <td><input class="form-control-sm" type="number" name="communication" style="margin-left: 20px;float: right;" min="0" max="5"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>2.)</td>
+                                        <td>
+                                            <p style="float: left;text-align: left;">The professor assigns a reasonable amount of work</p>
+                                        </td>
+                                        <td><input class="form-control-sm" type="number" name="work_load" style="margin-left: 20px;float: right;" min="0" max="5"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>3.)</td>
+                                        <td>
+                                            <p style="float: left;text-align: left;">Grading of assignments is consistent and fair</p>
+                                        </td>
+                                        <td><input class="form-control-sm" type="number" name="grading" style="margin-left: 20px;float: right;" min="0" max="5"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>4.)</td>
+                                        <td>
+                                            <p style="float: left;text-align: left;">Students are encouraged to ask questions</p>
+                                        </td>
+                                        <td><input class="form-control-sm" type="number" name="questions_encouraged" style="margin-left: 20px;float: right;" min="0" max="5"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>5.)</td>
+                                        <td>
+                                            <p style="float: left;text-align: left;">The professor is able to maintain the interest of the class</p>
+                                        </td>
+                                        <td><input class="form-control-sm" type="number" name="student_engagement" style="margin-left: 20px;float: right;" min="0" max="5"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>6.)</td>
+                                        <td>
+                                            <p style="float: left;text-align: left;">The professor is committed to their students' success&nbsp;</p>
+                                        </td>
+                                        <td><input class="form-control-sm" type="number" name="committment" style="margin-left: 20px;float: right;" min="0" max="5"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>7.)</td>
+                                        <td>
+                                            <p style="float: left;text-align: left;">I would recommend that, given the chance, other students should take classes being taught by this professor&nbsp;</p>
+                                        </td>
+                                        <td><input class="form-control-sm" type="number" name="overall_recomendation" style="margin-left: 20px;float: right;" min="0" max="5"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!--<div style="margin: 0px 10px;"></div>
+                        <div style="margin: 0px 10px;"></div>
+                        <div style="margin: 0px 10px;"></div>
+                        <div style="margin: 0px 10px;"></div>
+                        <div style="margin: 0px 10px;"></div>-->
                     </div>
-                    <div class="table-responsive" style="width: 60%;margin: 20px auto 10px;">
-                        <table class="table">
-                            <thead>
-                                <tr></tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1.)</td>
-                                    <td>
-                                        <p style="float: left;text-align: left;">Course material is communicated effectively</p>
-                                    </td>
-                                    <td><input class="form-control-sm" type="number" style="margin-left: 20px;float: right;" min="0" max="5"></td>
-                                </tr>
-                                <tr>
-                                    <td>2.)</td>
-                                    <td>
-                                        <p style="float: left;text-align: left;">The professor assigns a reasonable amount of work</p>
-                                    </td>
-                                    <td><input class="form-control-sm" type="number" style="margin-left: 20px;float: right;" min="0" max="5"></td>
-                                </tr>
-                                <tr>
-                                    <td>3.)</td>
-                                    <td>
-                                        <p style="float: left;text-align: left;">Grading of assignments is consistent and fair</p>
-                                    </td>
-                                    <td><input class="form-control-sm" type="number" style="margin-left: 20px;float: right;" min="0" max="5"></td>
-                                </tr>
-                                <tr>
-                                    <td>4.)</td>
-                                    <td>
-                                        <p style="float: left;text-align: left;">Students are encouraged to ask questions</p>
-                                    </td>
-                                    <td><input class="form-control-sm" type="number" style="margin-left: 20px;float: right;" min="0" max="5"></td>
-                                </tr>
-                                <tr>
-                                    <td>5.)</td>
-                                    <td>
-                                        <p style="float: left;text-align: left;">The professor is able to maintain the interest of the class</p>
-                                    </td>
-                                    <td><input class="form-control-sm" type="number" style="margin-left: 20px;float: right;" min="0" max="5"></td>
-                                </tr>
-                                <tr>
-                                    <td>6.)</td>
-                                    <td>
-                                        <p style="float: left;text-align: left;">The professor is committed to their students' success&nbsp;</p>
-                                    </td>
-                                    <td><input class="form-control-sm" type="number" style="margin-left: 20px;float: right;" min="0" max="5"></td>
-                                </tr>
-                                <tr>
-                                    <td>7.)</td>
-                                    <td>
-                                        <p style="float: left;text-align: left;">I would recommend that, given the chance, other students should take classes being taught by this professor&nbsp;</p>
-                                    </td>
-                                    <td><input class="form-control-sm" type="number" style="margin-left: 20px;float: right;" min="0" max="5"></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div style="margin: 0px 10px;"></div>
-                    <div style="margin: 0px 10px;"></div>
-                    <div style="margin: 0px 10px;"></div>
-                    <div style="margin: 0px 10px;"></div>
-                    <div style="margin: 0px 10px;"></div>
-                </div><button class="btn btn-primary" type="button" style="margin-top: 20px;background: #500000;">Submit</button>
+                    <button id="submitBtn" disabled class="btn btn-primary" type="submit" style="margin-top: 20px;background: #500000;">Submit</button>
+                </form>
             </div>
         </div>
     </div>
+    <datalist id="ProfessorsDataList"></datalist>
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
 </body>
