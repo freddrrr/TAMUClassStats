@@ -50,7 +50,11 @@ const authenticateUser = (request, response) => {
                     response.redirect("/search");
                 }
                 else {
-                    response.send("Incorrect Email and/or Password!");
+                    // CURRENTLY NOT FINISHED, GOAL IS TO HAVE THIS REDIRECT SHOW ALERT AT TOP OF LOGIN PAGE
+                    // WILL DISPLAY ERROR AND HYPERLINK ON PAGE TO REDIRECT BACK TO LOGIN
+                    request.session.error = 'Incorrect username or password';
+                    response.redirect(401, '/login');
+                    //response.render('login', { error: request.session.error });
                 }
             }
         )
