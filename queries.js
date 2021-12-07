@@ -198,36 +198,48 @@ const getSectionsByCriteria = (request, response) => {
     var courseNumber = request.body.courseNumber;
     var filter = request.body.filter;
     var filterQueryString = "";
+    var filterQueryString2 = "";
 
     switch (filter) {
         case "Average GPA":
             filterQueryString = "";
         case "Communication of Course Material":
-            filterQueryString = "";
+            filterQueryString = "Score_Communication";
+            filterQueryString2 = "Communication Rating";
             break
         case "Work Load":
-            filterQueryString = "";
+            filterQueryString = "Score_WorkLoad";
+            filterQueryString2 = "Workload Rating";
             break;
         case "Fairness of Grading":
-            filterQueryString = "";
+            filterQueryString = "Score_GradingConsistency";
+            filterQueryString2 = "Fairness of Grading Rating";
             break;
         case "Questions Encouraged":
-            filterQueryString = "";
+            filterQueryString = "Score_QuestionsEncouraged";
+            filterQueryString2 = "Questions Encouraged Rating";
             break;
         case "Student Engagement":
-            filterQueryString = "";
+            filterQueryString = "Score_StudentEngagement";
+            filterQueryString2 = "Student Engagement Rating";
             break;
         case "Committment to Students' Success":
-            filterQueryString = "";
+            filterQueryString = "Score_CommittmentToStudents";
+            filterQueryString2 = "Commitment to Students Rating";
             break;
         case "Overall Recommendability":
-            filterQueryString = "";
+            filterQueryString = "Score_OverallRecommendation";
+            filterQueryString2 = "Recommendability Rating";
             break;
     }
 
-    pool.query("SELECT * FROM public.\"Sections\"" +
-        "WHERE \"Term\" = $1 AND \"Year\" = $2 AND \"Department\" = $3 AND \"CourseNum\" = $4 " + filterQueryString, //TODO: Finish writing query to select and sort classes
-        [term, year, department, courseNumber],
+    pool.query("SELECT public.\"Sections\".*, AVG(public.\"Reviews\".\"$1\") AS $2" +
+        "FROM public.\"Sections\" INNER JOIN public.\"Reviews\"" +
+        "ON \"Sections\".\"ProfessorUIN\" = \"Reviews\".\"ProfessorUIN\"" +
+        "WHERE \"Term\" = $3 AND \"Year\" = $4 AND \"Department\" = $5 AND \"CourseNum\" = $6 " +
+        "GROUP BY \"Sections\".\"CRN\"" +
+        "ORDER BY $2 DESC;"
+        , [filterQueryString, filterQueryString2, term, year, department, courseNumber],
         (err, res) => {
             if (err) {
                 response.status(500).send("An unknown error has occurred while attempting to interact with the database");
