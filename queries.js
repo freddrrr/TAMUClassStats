@@ -240,11 +240,13 @@ const getSectionsByCriteria = (request, response) => {
             break;
     }
 
-    var mySearch = "SELECT public.\"Sections\".*, AVG(" + filterQueryString + ") AS \"Rating\" " +
+    var mySearch = "SELECT public.\"Professors\".\"LastName\", public.\"Professors\".\"FirstInitial\", public.\"Sections\".*, AVG(" + filterQueryString + ") AS \"Rating\" " +
         "FROM public.\"Sections\" INNER JOIN public.\"Reviews\" " +
         "ON \"Sections\".\"ProfessorUIN\" = \"Reviews\".\"ProfessorUIN\" " +
-        "WHERE \"Term\" = '" + term + "' AND \"Year\" = " + year + " AND \"Department\" = '" + department + "' AND \"CourseNum\" = " + courseNumber + " "+
-        "GROUP BY \"Sections\".\"CRN\" " +
+        "INNER JOIN public.\"Professors\" " +
+        "ON \"Sections\".\"ProfessorUIN\" = \"Professors\".\"UIN\" " +
+        "WHERE \"Term\" = '" + term + "' AND \"Year\" = " + year + " AND \"Sections\".\"Department\" = '" + department + "' AND \"CourseNum\" = " + courseNumber + " "+
+        "GROUP BY \"Sections\".\"CRN\", \"Professors\".\"LastName\", \"Professors\".\"FirstInitial\" " +
         "ORDER BY \"Rating\" DESC;";
     pool.query(
         mySearch,
