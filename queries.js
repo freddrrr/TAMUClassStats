@@ -200,54 +200,57 @@ const getSectionsByCriteria = (request, response) => {
     var filterQueryString = "";
     var filterQueryString2 = "";
 
-    //console.log(term);
-    //console.log(year);
-    //console.log(department);
-    //console.log(courseNumber);
-    //console.log(filter);
+    var mySearch = "";
+    if (filter != "Average GPA") {
+        switch (filter) {
+            case "Communication of Course Material":
+                filterQueryString = "public.\"Reviews\".\"Score_Communication\"";
+                break
+            case "Work Load":
+                filterQueryString = "public.\"Reviews\".\"Score_WorkLoad\"";
+                break;
+            case "Fairness of Grading":
+                filterQueryString = "public.\"Reviews\".\"Score_GradingConsistency\"";
+                break;
+            case "Questions Encouraged":
+                filterQueryString = "public.\"Reviews\".\"Score_QuestionsEncouraged\"";
+                break;
+            case "Student Engagement":
+                filterQueryString = "public.\"Reviews\".\"Score_StudentEngagement\"";
+                break;
+            case "Committment to Students' Success":
+                filterQueryString = "public.\"Reviews\".\"Score_CommittmentToStudents\"";
+                break;
+            case "Overall Recommendability":
+                filterQueryString = "public.\"Reviews\".\"Score_OverallRecommendation\"";
+                break;
+        }
 
-    switch (filter) {
-        case "Average GPA":
-            filterQueryString = "";
-            break;
-        case "Communication of Course Material":
-            filterQueryString = "public.\"Reviews\".\"Score_Communication\"";
-            //filterQueryString2 = "\"Communication Rating\"";
-            break
-        case "Work Load":
-            filterQueryString = "public.\"Reviews\".\"Score_WorkLoad\"";
-            //filterQueryString2 = "\"Workload Rating\"";
-            break;
-        case "Fairness of Grading":
-            filterQueryString = "public.\"Reviews\".\"Score_GradingConsistency\"";
-            //filterQueryString2 = "\"Fairness of Grading Rating\"";
-            break;
-        case "Questions Encouraged":
-            filterQueryString = "public.\"Reviews\".\"Score_QuestionsEncouraged\"";
-            //filterQueryString2 = "\"Questions Encouraged Rating\"";
-            break;
-        case "Student Engagement":
-            filterQueryString = "public.\"Reviews\".\"Score_StudentEngagement\"";
-            //filterQueryString2 = "\"Student Engagement Rating\"";
-            break;
-        case "Committment to Students' Success":
-            filterQueryString = "public.\"Reviews\".\"Score_CommittmentToStudents\"";
-            //filterQueryString2 = "\"Commitment to Students Rating\"";
-            break;
-        case "Overall Recommendability":
-            filterQueryString = "public.\"Reviews\".\"Score_OverallRecommendation\"";
-            //filterQueryString2 = "\"Recommendability Rating\"";
-            break;
+        mySearch = "SELECT public.\"Professors\".\"LastName\", public.\"Professors\".\"FirstInitial\", public.\"Sections\".*, AVG(" + filterQueryString + ") AS \"Rating\" " +
+            "FROM public.\"Sections\" INNER JOIN public.\"Reviews\" " +
+            "ON \"Sections\".\"ProfessorUIN\" = \"Reviews\".\"ProfessorUIN\" " +
+            "INNER JOIN public.\"Professors\" " +
+            "ON \"Sections\".\"ProfessorUIN\" = \"Professors\".\"UIN\" " +
+            "WHERE \"Term\" = '" + term + "' AND \"Year\" = " + year + " AND \"Sections\".\"Department\" = '" + department + "' AND \"CourseNum\" = " + courseNumber + " " +
+            "GROUP BY \"Sections\".\"CRN\", \"Professors\".\"LastName\", \"Professors\".\"FirstInitial\" " +
+            "ORDER BY \"Rating\" DESC;";
+    }
+    else {
+        mySearch = "SELECT public.\"Professors\".\"LastName\", public.\"Professors\".\"FirstInitial\", \"AverageGPAs\".\"Rating\", public.\"Sections\".\"CRN\" " +
+            "FROM public.\"Sections\" " +
+            "INNER JOIN " +
+            "(" +
+                "SELECT public.\"Sections\".\"ProfessorUIN\" AS \"ProfessorUIN\", AVG(public.\"Sections\".\"AvgGPA\") AS \"Rating\" " +
+                "FROM public.\"Sections\" " +
+                "GROUP BY \"Sections\".\"ProfessorUIN\" " +
+                "ORDER BY \"Rating\" DESC " +
+            ") AS \"AverageGPAs\" " +
+            "ON \"Sections\".\"ProfessorUIN\" = \"AverageGPAs\".\"ProfessorUIN\" " +
+            "INNER JOIN public.\"Professors\" " +
+            "ON \"Sections\".\"ProfessorUIN\" = \"Professors\".\"UIN\" " +
+            "WHERE \"Year\" = " + year + " AND \"Term\" = '" + term + "' AND \"Sections\".\"Department\" = '" + department + "' AND \"CourseNum\" = " + courseNumber + ";";
     }
 
-    var mySearch = "SELECT public.\"Professors\".\"LastName\", public.\"Professors\".\"FirstInitial\", public.\"Sections\".*, AVG(" + filterQueryString + ") AS \"Rating\" " +
-        "FROM public.\"Sections\" INNER JOIN public.\"Reviews\" " +
-        "ON \"Sections\".\"ProfessorUIN\" = \"Reviews\".\"ProfessorUIN\" " +
-        "INNER JOIN public.\"Professors\" " +
-        "ON \"Sections\".\"ProfessorUIN\" = \"Professors\".\"UIN\" " +
-        "WHERE \"Term\" = '" + term + "' AND \"Year\" = " + year + " AND \"Sections\".\"Department\" = '" + department + "' AND \"CourseNum\" = " + courseNumber + " "+
-        "GROUP BY \"Sections\".\"CRN\", \"Professors\".\"LastName\", \"Professors\".\"FirstInitial\" " +
-        "ORDER BY \"Rating\" DESC;";
     pool.query(
         mySearch,
         (err, res) => {
@@ -257,7 +260,6 @@ const getSectionsByCriteria = (request, response) => {
             }
             else {
                 //Populate result array with Section entries sorted according to User's preference
-
                 response.status(200).json(res.rows);
             }
         }

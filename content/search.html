@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="assets/fonts/ionicons.min.css">
     <link rel="stylesheet" href="assets/css/Login-Form-Clean.css">
     <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/search.css">
     <script src="assets/js/search.js"></script>
 </head>
 
@@ -62,6 +63,7 @@
                             <div class="dropleft btn-group" role="group">
                                 <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" type="button" style="background: rgb(124,124,124);border-color: rgb(80, 80, 80);border-top-color: rgb(80,;border-right-color: 80,;border-bottom-color: 80);border-left-color: 80,;"></button>
                                 <div id="FilterDropdown" class="dropdown-menu" style="max-height: 200px; overflow: auto">
+                                    <filterDropdownItem class="dropdown-item" onclick="filterOnClickFunc()">Average GPA</filterDropdownItem>
                                     <filterDropdownItem class="dropdown-item" onclick="filterOnClickFunc()">Communication of Course Material</filterDropdownItem>
                                     <filterDropdownItem class="dropdown-item" onclick="filterOnClickFunc()">Work Load</filterDropdownItem>
                                     <filterDropdownItem class="dropdown-item" onclick="filterOnClickFunc()">Fairness of Grading</filterDropdownItem>

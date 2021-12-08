@@ -87,26 +87,27 @@ async function performSearch() {
 function generateResultsTable(data, filter) {
     var tableResponsive = document.createElement("table-responsive");
     var table = document.createElement("table");
+    table.classList.add("minimalistBlack");
 
     //Assign headers to table
     var tableHeader = document.createElement("thead");
     var tableHeaderRow = document.createElement("tr");
 
     var tableHeaderCRN = document.createElement("th");
-    tableHeaderCRN.style.backgroundColor = "black";
-    tableHeaderCRN.style.color = "white";
+    //tableHeaderCRN.style.backgroundColor = "black";
+    //tableHeaderCRN.style.color = "white";
     tableHeaderCRN.innerText = "CRN";
     tableHeaderRow.innerHTML += tableHeaderCRN.outerHTML;
 
     var tableHeaderProf = document.createElement("th");
-    tableHeaderProf.style.backgroundColor = "black";
-    tableHeaderProf.style.color = "white";
+    //tableHeaderProf.style.backgroundColor = "black";
+    //tableHeaderProf.style.color = "white";
     tableHeaderProf.innerText = "Professor";
     tableHeaderRow.innerHTML += tableHeaderProf.outerHTML;
 
     var tableHeaderRating = document.createElement("th");
-    tableHeaderRating.style.backgroundColor = "black";
-    tableHeaderRating.style.color = "white";
+    //tableHeaderRating.style.backgroundColor = "black";
+    //tableHeaderRating.style.color = "white";
     tableHeaderRating.innerText = filter;
     tableHeaderRow.innerHTML += tableHeaderRating.outerHTML;
 
@@ -131,7 +132,7 @@ function generateResultsTable(data, filter) {
         tableDataRow.innerHTML += tableDataProfessor.outerHTML;
 
         var tableDataFilter = document.createElement("td");
-        tableDataFilter.innerText = data[idx].Rating.substring(0, 4);
+        tableDataFilter.innerText = data[idx].Rating.toString().substring(0, 4);
         tableDataRow.innerHTML += tableDataFilter.outerHTML;
 
         tableBody.innerHTML += tableDataRow.outerHTML;
