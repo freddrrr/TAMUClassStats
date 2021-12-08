@@ -200,52 +200,62 @@ const getSectionsByCriteria = (request, response) => {
     var filterQueryString = "";
     var filterQueryString2 = "";
 
+    //console.log(term);
+    //console.log(year);
+    //console.log(department);
+    //console.log(courseNumber);
+    //console.log(filter);
+
     switch (filter) {
         case "Average GPA":
             filterQueryString = "";
+            break;
         case "Communication of Course Material":
-            filterQueryString = "Score_Communication";
-            filterQueryString2 = "Communication Rating";
+            filterQueryString = "public.\"Reviews\".\"Score_Communication\"";
+            //filterQueryString2 = "\"Communication Rating\"";
             break
         case "Work Load":
-            filterQueryString = "Score_WorkLoad";
-            filterQueryString2 = "Workload Rating";
+            filterQueryString = "public.\"Reviews\".\"Score_WorkLoad\"";
+            //filterQueryString2 = "\"Workload Rating\"";
             break;
         case "Fairness of Grading":
-            filterQueryString = "Score_GradingConsistency";
-            filterQueryString2 = "Fairness of Grading Rating";
+            filterQueryString = "public.\"Reviews\".\"Score_GradingConsistency\"";
+            //filterQueryString2 = "\"Fairness of Grading Rating\"";
             break;
         case "Questions Encouraged":
-            filterQueryString = "Score_QuestionsEncouraged";
-            filterQueryString2 = "Questions Encouraged Rating";
+            filterQueryString = "public.\"Reviews\".\"Score_QuestionsEncouraged\"";
+            //filterQueryString2 = "\"Questions Encouraged Rating\"";
             break;
         case "Student Engagement":
-            filterQueryString = "Score_StudentEngagement";
-            filterQueryString2 = "Student Engagement Rating";
+            filterQueryString = "public.\"Reviews\".\"Score_StudentEngagement\"";
+            //filterQueryString2 = "\"Student Engagement Rating\"";
             break;
         case "Committment to Students' Success":
-            filterQueryString = "Score_CommittmentToStudents";
-            filterQueryString2 = "Commitment to Students Rating";
+            filterQueryString = "public.\"Reviews\".\"Score_CommittmentToStudents\"";
+            //filterQueryString2 = "\"Commitment to Students Rating\"";
             break;
         case "Overall Recommendability":
-            filterQueryString = "Score_OverallRecommendation";
-            filterQueryString2 = "Recommendability Rating";
+            filterQueryString = "public.\"Reviews\".\"Score_OverallRecommendation\"";
+            //filterQueryString2 = "\"Recommendability Rating\"";
             break;
     }
 
-    pool.query("SELECT public.\"Sections\".*, AVG(public.\"Reviews\".\"$1\") AS $2" +
-        "FROM public.\"Sections\" INNER JOIN public.\"Reviews\"" +
-        "ON \"Sections\".\"ProfessorUIN\" = \"Reviews\".\"ProfessorUIN\"" +
-        "WHERE \"Term\" = $3 AND \"Year\" = $4 AND \"Department\" = $5 AND \"CourseNum\" = $6 " +
-        "GROUP BY \"Sections\".\"CRN\"" +
-        "ORDER BY $2 DESC;"
-        , [filterQueryString, filterQueryString2, term, year, department, courseNumber],
+    var mySearch = "SELECT public.\"Sections\".*, AVG(" + filterQueryString + ") AS \"Rating\" " +
+        "FROM public.\"Sections\" INNER JOIN public.\"Reviews\" " +
+        "ON \"Sections\".\"ProfessorUIN\" = \"Reviews\".\"ProfessorUIN\" " +
+        "WHERE \"Term\" = '" + term + "' AND \"Year\" = " + year + " AND \"Department\" = '" + department + "' AND \"CourseNum\" = " + courseNumber + " "+
+        "GROUP BY \"Sections\".\"CRN\" " +
+        "ORDER BY \"Rating\" DESC;";
+    pool.query(
+        mySearch,
         (err, res) => {
             if (err) {
+                console.log(err);
                 response.status(500).send("An unknown error has occurred while attempting to interact with the database");
             }
             else {
                 //Populate result array with Section entries sorted according to User's preference
+
                 response.status(200).json(res.rows);
             }
         }

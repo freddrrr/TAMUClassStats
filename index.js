@@ -63,6 +63,8 @@ app.get('/query/departments', db.getDepartments)
 app.get('/query/professors', db.getProfessors)
 //Pull list of semesters
 app.get('/query/semesters', db.getSemesters)
+//Perform course search
+app.post('/query/search', db.getSectionsByCriteria)
 
 /*Development Endpoints (i.e. not active for release)*/
 //app.get("/dev/dept", db.populateDepartments)

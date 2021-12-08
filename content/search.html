@@ -26,7 +26,7 @@
     </nav>
     <div class="container" style="transform: translateY(50%);">
         <div class="row">
-            <div class="col-md-6" style="align-self: center;">
+            <div id="ResultsColumn" class="col-md-6" style="align-self: center;">
                 <div class="jumbotron">
                     <h1 style="margin-bottom: 20px;">Search for a class...</h1>
                     <p>Select values for each of the fields and press the <strong>Submit</strong>&nbsp;button to perform a query.</p>
@@ -54,7 +54,7 @@
                         </div>
                     </div>
                     <div class="input-group" style="margin-bottom: 10px;">
-                        <div class="input-group-prepend"><span class="input-group-text">Course Number</span></div><input class="form-control" type="text">
+                        <div class="input-group-prepend"><span class="input-group-text">Course Number</span></div><input id ="CourseNumberText" class="form-control" type="text">
                     </div>
                     <div class="input-group" style="margin-bottom: 10px;">
                         <div class="input-group-prepend"><span class="input-group-text">Filter</span></div><input id="FilterText" class="form-control" type="text" name="filter" style="background-color:white" disabled>
@@ -62,7 +62,6 @@
                             <div class="dropleft btn-group" role="group">
                                 <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" type="button" style="background: rgb(124,124,124);border-color: rgb(80, 80, 80);border-top-color: rgb(80,;border-right-color: 80,;border-bottom-color: 80);border-left-color: 80,;"></button>
                                 <div id="FilterDropdown" class="dropdown-menu" style="max-height: 200px; overflow: auto">
-                                    <filterDropdownItem class="dropdown-item" onclick="filterOnClickFunc()">(None)</filterDropdownItem>
                                     <filterDropdownItem class="dropdown-item" onclick="filterOnClickFunc()">Communication of Course Material</filterDropdownItem>
                                     <filterDropdownItem class="dropdown-item" onclick="filterOnClickFunc()">Work Load</filterDropdownItem>
                                     <filterDropdownItem class="dropdown-item" onclick="filterOnClickFunc()">Fairness of Grading</filterDropdownItem>
@@ -73,7 +72,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div><button class="btn btn-primary" type="button" style="background: #500000;">Submit</button>
+                    </div><button class="btn btn-primary" type="button" onclick="performSearch()" style="background: #500000;">Submit</button>
                 </form>
             </div>
         </div>
